@@ -1,0 +1,122 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>panorama</title>	
+<script src='common/AppLoader.js'></script>
+
+
+
+
+<script>
+
+
+
+
+
+	var trace = window.console.log.bind(window.console);
+	var tStyle
+	var dcmParam;	
+	var appLoader;
+	var path="src/"
+	var plus="?"+Math.random();
+	var manifest = [
+		{src: path + 'libMy/divLib.js' + plus},		
+		{src: path + 'lib/jquery-1.11.3.js' + plus},
+		//{src: path + 'lib/three99.js' + plus},
+		{src: path + 'lib/three.min.js' + plus},
+		{src: path + 'lib/pixi.js' + plus},		
+		//{src: path + 'lib/shader/ShaderAll.js' + plus},
+
+		{src: path + '/lib/tween.min.js' + plus},
+
+		
+		{src: path + 'lib/loaders/GLTFLoader.js' + plus},
+		{src: path + 'libMy/utility/Calc.js' + plus},
+		{src: path + 'libMy/utility/Rectangle.js' + plus},
+
+		{src: path + 'libMy/FileSaver.js' + plus},
+		{src: path + 'php/Php.js' + plus},
+
+		{src:'build/build.js' + plus}
+	];
+
+
+
+	var main
+	function sizeWindow () {
+		var w = document.documentElement.clientWidth;
+		var h = document.documentElement.clientHeight;
+		if (main) main.sizeWindow(w, h);		
+		if (appLoader) appLoader.sizeWindow(w,h);
+
+	}
+
+
+	function init () {
+		window.onresize = sizeWindow;
+		appLoader = new AppLoader(
+			null,
+			"resources/image/picLoad.png",			
+			manifest,
+			function () {  				
+				dcmParam = new DCM();				
+				main=new Main(function(s, p){
+					if(s=="init"){
+						appLoader.indicator.procent = 100;
+						sizeWindow()					
+					}
+				},1)				
+				sizeWindow()				
+			},
+			null,
+			-85		
+		)
+		sizeWindow();		
+	}
+
+	function korektTrace () {
+		var textarea = document.createElement('textarea')
+		textarea.style.width=(300)+"px";
+		textarea.style.height=(150)+"px";
+		textarea.style.position = 'fixed';
+		textarea.style.top = '154px';
+		textarea.style.left = '0px';
+		document.body.appendChild(textarea)	
+		trace=function(s){			
+			textarea.value=s+"\n"+textarea.value
+		}
+	}
+
+
+
+
+
+	//-----------------------------
+
+
+
+
+
+
+
+
+</script>
+
+<style type="text/css">
+	#stats { position: absolute; top:0; left: 200px; }
+	/*@font-face {
+	  font-family: "SFUIDisplay-Bold";
+	  src: url(resources/font/SFUIDisplay-Bold.ttf) format("truetype");
+	}
+	@font-face {
+	  font-family: "SFUIDisplay-Light";
+	  src: url(resources/font/SFUIDisplay-Light.ttf) format("truetype");
+	}*/	
+</style>
+<!--<video id="video" webkit-playsinline>	</video>-->
+</head>
+<meta name="viewport" content="width=device-width,height=device-height,user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<body onload="init()">
+
+</body></html>
+
+
