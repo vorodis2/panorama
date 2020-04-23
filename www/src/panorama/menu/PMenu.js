@@ -14,6 +14,7 @@ import {PLeftVerg } from './PLeftVerg.js';
 import {PCentorVerg } from './PCentorVerg.js';
 
 import {PNiz} from './PNiz.js';
+import {PMap} from './PMap.js';
 
 export class PMenu  {
   	constructor(par,fun) {  		
@@ -46,6 +47,9 @@ export class PMenu  {
             self.fun(s,p);
         });
 
+        this.array[3]=this.pMap=new PMap(this, function(s,p){
+            self.fun(s,p);
+        });
 
 
 
@@ -114,6 +118,7 @@ export class PMenu  {
             this._indexSah = value; 
             this.pCentorVerg.indexSah=value;
             this.pNiz.indexSah=value;
+            this.pMap.indexSah=value;
         }        
             
     }

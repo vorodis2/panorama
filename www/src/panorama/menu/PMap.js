@@ -3,10 +3,10 @@
 import { MOBaza } from './MOBaza.js';
 
 
-export class PNiz extends MOBaza {
+export class PMap extends MOBaza {
   	constructor(par,fun) {  
         super(par,fun);
-  		this.type="PNiz";
+  		this.type="PMap";
 
   		var self=this;
 
@@ -15,35 +15,31 @@ export class PNiz extends MOBaza {
         this.dCont=new DCont(par.dCont);
 
 
-        this.batton=new DButton(this.dCont,20,0,"",function(){
+       /* this.batton=new DButton(this.dCont,20,0,"",function(){
             self.open=!self.open
             self.sizeWindow()
         },"resources/image/button0.png");        
-        this.batton.color="#ffffff";
+        this.batton.color="#ffffff";*/
 
         this.arrConf=[];
 
         let b=false
-        if(mainBig.objectBase.teg==undefined){mainBig.objectBase.teg=[];b=true}
+        if(mainBig.objectBase.scene==undefined){mainBig.objectBase.scene={};b=true}
+        if(mainBig.objectBase.scene.arrFoto==undefined){
+            mainBig.objectBase.scene.arrFoto=["resources/image/pic.png","resources/image/pic.png","resources/image/pic.png","resources/image/pic.png"];
+            b=true
+        }
+        if(mainBig.objectBase.scene.array==undefined){
+            mainBig.objectBase.scene.array=[];
+            b=true
+        }
+
         if(b)self.par.par.locSave.saveTime();
 
-        this.arrConf=mainBig.objectBase.teg;
+        this.arrConf=mainBig.objectBase.scene.array;
+        this.arrFoto=mainBig.objectBase.scene.arrFoto;
 
-
-        
-        /*for (var i = 0; i < 2; i++) {            
-            this.arrConf.push({src:"resources/image/button0.png",title:"xz"+i})
-        }*/
-
-
-        this.gallery=new GalleryXZ(this.dCont,0,0,function(){
-            self.openObj(this.obj);            
-        });
-        this.gallery.height=this.wh;
-        this.gallery.start(this.arrConf);
-        this.gallery.widthPic=this.wh*1.25-this.otstup;
-        this.gallery.heightPic=this.wh-this.otstup;
-        this.gallery.kolII=222;
+ 
 
 
 
@@ -66,19 +62,65 @@ export class PNiz extends MOBaza {
         if(mainBig.debug==true){
             this.dCMenu=new DCont(this.dCont);
             this.dCMenu.visible=false;
+
+
+            this.gallery=new GalleryXZ(this.dCMenu,20,120,function(){
+                self.openObj(this.obj);            
+            });
+            this.gallery.height=70;
+            this.gallery.width=270;
+
+            this.gallery.start(this.arrConf);            
+            this.gallery.kolII=222;
+
+
+          
+
+
+
+            
+            
             this.bat=new DButton(this.dCMenu,20,200,"ADD",function(){
                 self.arrConf.push({
                     src:"resources/image/pic.png",
                     src1:"resources/image/pic.png",
+                    src2:"resources/image/pic.png",
+                    x:100,
+                    y:100,
                     title:"xzTitle",
                     key:"xzKey"
                 })
                 self.gallery.start(self.arrConf);
                 self.par.par.locSave.saveTime();
-
                 self.openObj(self.gallery.array[self.gallery.array.length-1].object);
                 self.gallery.index=self.gallery.array.length-1;
+
             });
+
+
+            for (var i = 0; i < this.arrFoto.length; i++) {
+                let b=new DButton(this.dCMenu,122+i*34,200," "+i,function(){
+                    let idArr=this.idArr
+                    if(this.files[0]){
+                        let a=this.files[0].name.split(".");
+                        let n=new Date().getTime()+"."+a[a.length-1];                       
+
+
+                        uploadFile("./../resources/d/"+n,this.files[0],function(s){  
+                            self.arrFoto[idArr]="resources/d/"+n;
+                            self.par.par.locSave.saveTime();                           
+                        });
+                    }
+
+                })
+                b.idArr=i
+                b.width=32
+                b.startFile("image/*");
+            }
+
+
+
+
             this.window=new DWindow(this.dCMenu,20,230,"teg");
             this.window.width=220
             this.window.visible=false;
@@ -117,13 +159,15 @@ export class PNiz extends MOBaza {
             this.input1.width=this.window.width-50-5;
             this.input1.timeFun=1
             sy+=32+5;
+
+
             this.battonLoad=new DButton(this.window.content, 5, sy, "null",function(){
                 //this.files[0]
-                trace("!!",this.files[0].name)
+                
                 if(this.files[0]){
                     let a=this.files[0].name.split(".")
                     let n=new Date().getTime()+"."+a[a.length-1]
-                    trace(n)
+                    
 
 
                     uploadFile("./../resources/d/"+n,this.files[0],function(s){                        
@@ -153,6 +197,37 @@ export class PNiz extends MOBaza {
             this.battonLoad1.startFile("image/*");
 
             sy+=32+5;
+            this.battonLoad2=new DButton(this.window.content, 5, sy, "null",function(){
+                if(this.files[0]){
+                    let a=this.files[0].name.split(".");
+                    let n=new Date().getTime()+"."+a[a.length-1];
+                    uploadFile("./../resources/d/"+n,this.files[0],function(s){                        
+                        self.object.src2="resources/d/"+n;
+                        self.gallery.start([])
+                        self.gallery.start(self.arrConf)
+                        self.par.par.locSave.saveTime();
+                    })
+                }
+            })
+            this.battonLoad2.width=this.window.width-10;
+            this.battonLoad2.startFile("image/*");
+            sy+=32+5;
+
+
+            this.slid=new DSliderBig(this.window.content, 5, sy, function(){
+                self.object.x=this.value
+                self.par.par.locSave.saveTime();
+            },"x",0,1000)
+            this.slid.width=this.window.width-10;
+            sy+=42+5;
+
+            this.slid1=new DSliderBig(this.window.content, 5, sy, function(){
+                self.object.y=this.value
+                self.par.par.locSave.saveTime();
+            },"y",0,1000)
+            this.slid1.width=this.window.width-10;
+            sy+=42+5;
+
             this.window.height=sy+32;
         }
 
@@ -162,8 +237,11 @@ export class PNiz extends MOBaza {
             this.object=obj;            
             this.battonLoad.text=this.object.src;
             this.battonLoad1.text=this.object.src1;
+            this.battonLoad2.text=this.object.src2;
             this.input.text=this.object.title
             this.input1.text=this.object.key
+            this.slid.value=this.object.x;
+            this.slid1.value=this.object.y;
         }
 
 
@@ -187,7 +265,6 @@ export class PNiz extends MOBaza {
             });
         }
 
-
         var w,h,s
 
         this.sizeWindow = function(_w,_h,_s){ 
@@ -196,48 +273,7 @@ export class PNiz extends MOBaza {
                 h=_h;
                 s=_s;
             }
-
-            let ww=w/s
-            let www=(this.gallery.widthPic+2)                
-            let kh=Math.floor(ww/(this.gallery.widthPic+2));
-            if(kh>this.gallery.array.length)kh=this.gallery.array.length
-
-            if(this._open == true){              
-
-                
-                
-                this.gallery.kolII=kh;
-
-                this.gallery.width=this.gallery.kolII*www+4;
-                this.gallery.height=this.gallery.hh;
-
-                this.gallery.x=(w/s-this.gallery.width)/2;
-                this.gallery.y=(h/s-this.gallery.height)-2;
-
-
-                this.batton.y=this.gallery.y-this.batton.height;
-                this.batton.x=(w/s-this.batton.width)/2;
-
-            }else{
-                
-                if(kh==this.gallery.array.length){
-                    this.gallery.kolII=kh;
-                    this.gallery.width=this.gallery.kolII*www+4;
-                    this.gallery.x=(w/s-this.gallery.width)/2;
-                }else{
-                    this.gallery.x=0
-                    this.gallery.kolII=222;  
-                    this.gallery.width=w/s;   
-                }
-                this.gallery.height=this.wh;
-                
-                this.gallery.y=h/s-this.gallery.height-2;
-                this.batton.y=this.gallery.y-this.batton.height;
-                this.batton.x=(w/s-this.batton.width)/2;
-            }
         }
-
-
   	}
 
     set open(value) {
@@ -253,7 +289,7 @@ export class PNiz extends MOBaza {
         if (this._indexSah != value) {
             this._indexSah = value; 
             if(this.dCMenu) {
-                if(this._indexSah==1){
+                if(this._indexSah==2){
                         this.dCMenu.visible=true;
                     }else{
                         this.dCMenu.visible=false;
@@ -377,7 +413,7 @@ function BoxXZ(dCont, _x, _y, _fun) {
         this.image.image.removeEventListener("mouseover", this.mouseOver); 
     }
 
-    this.mouseOver = function (e) {
+   /* this.mouseOver = function (e) {
         self.boolOut = false;
         
         if(self._activ==false)self.panel.color1=dcmParam.compToHexArray(dcmParam.hexDec(self._color1), -5);
@@ -402,7 +438,7 @@ function BoxXZ(dCont, _x, _y, _fun) {
         this.panel.div.addEventListener("mouseover", this.mouseOver);
         this.image.image.addEventListener("mouseover", this.mouseOver);  
 
-    }
+    }*/
 
 
 
@@ -416,7 +452,7 @@ Object.defineProperties(BoxXZ.prototype, {
         set: function (value) {
             if (this._activ == value) return;
             this._activ = value;
-            this._color=this._color1;
+           // this._color=this._color1;
             trace("@@@@@@@@@@@@@@@@@@@")
 
             if(this._activ){
@@ -427,8 +463,8 @@ Object.defineProperties(BoxXZ.prototype, {
                 this.label.color="#000000"
             }
 
-            //if(this._activ==false)this.panel.color1=this._color1;
-           // else this.panel.color1=this._color;
+            if(this._activ==false)this.panel.color1=this._color1;
+            else this.panel.color1=this._color;
 
         },
         get: function () {

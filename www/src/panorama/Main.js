@@ -30,12 +30,12 @@ export class Main  {
 		this.contentHTML.style.left = '0px';
 		document.body.appendChild(this.contentHTML);  		
 
-		window.mainBig=this
+		window.mainBig=this;
 		//создание сцены
   		this.start = function () {	   
 			this.tick();            
             this.localStorage = new LocalStorage(null, "p3d");           
-            if(self.localStorage.object.debug==undefined)self.localStorage.object.debug=true;            
+            if(self.localStorage.object.debug == undefined)self.localStorage.object.debug = true;            
             this.debug=self.localStorage.object.debug;           
             this.fina();
 		};
@@ -47,7 +47,7 @@ export class Main  {
 		//стартуем дальше
         this.fina = function () {            	
 			self.glaf=new Glaf(self)		
-			sizeWindow()
+			sizeWindow();
 			fun("init");
 		}
 
