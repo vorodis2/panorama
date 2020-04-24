@@ -246,12 +246,12 @@ export default function MPosition3d (_parent, _content2d, _div) {
 		//if()		
 		_div.addEventListener("mousewheel", this.mousewheel);
 		_div.addEventListener("DOMMouseScroll", this.mousewheel);
-		trace("dsfasf###########",v)
+		
 	} else {
 		_div.addEventListener('touchstart', this.mouseDown, { passive: false, capture: true });						
 	}
 
-	trace("dsfasfasdfasdfasf")
+	
 
 	
 

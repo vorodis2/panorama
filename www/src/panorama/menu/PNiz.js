@@ -119,11 +119,11 @@ export class PNiz extends MOBaza {
             sy+=32+5;
             this.battonLoad=new DButton(this.window.content, 5, sy, "null",function(){
                 //this.files[0]
-                trace("!!",this.files[0].name)
+        
                 if(this.files[0]){
                     let a=this.files[0].name.split(".")
                     let n=new Date().getTime()+"."+a[a.length-1]
-                    trace(n)
+              
 
 
                     uploadFile("./../resources/d/"+n,this.files[0],function(s){                        
@@ -417,7 +417,7 @@ Object.defineProperties(BoxXZ.prototype, {
             if (this._activ == value) return;
             this._activ = value;
             this._color=this._color1;
-            trace("@@@@@@@@@@@@@@@@@@@")
+           
 
             if(this._activ){
                 this.image.link=this.object.src1;

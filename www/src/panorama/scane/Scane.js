@@ -4,6 +4,7 @@
 import { Menu } from './menu/Menu.js';*/
 import { Map } from './Map.js';
 import { Word } from './Word.js';
+import {BazaPoint} from './BazaPoint.js';
 
 
 export class Scane  {
@@ -22,19 +23,28 @@ export class Scane  {
         this.dCont=new DCont(this.par.dCont);        
         
 
-        this.map=new Map(this,function(s,p){ 
+        this.map=new Map(this,function(s,p){
+            fun(s,p);
+        })
 
+        this.word=new Word(this,function(s,p){
             fun(s,p)
         })
 
-        this.word=new Word(this,function(s,p){ 
-
+        this.bazaPoint=new BazaPoint(this,function(s,p){
             fun(s,p)
         })
+
+
+        this.dragPoint = function () { 
+            this.bazaPoint.dragPoint()
+        }
+
 
         this.fun_rotationZ = function () { 
             
             this.map.fun_rotationZ()
+            this.bazaPoint.fun_rotationZ()
         }
 
   		//ап дете сцена деленая на 2 в мейне
@@ -47,7 +57,8 @@ export class Scane  {
         //расчет окна
   		this.sizeWindow = function(w,h,s){    			
             this.map.sizeWindow(w,h,s)
-            this.word.sizeWindow(w,h,s)      
+            this.word.sizeWindow(w,h,s)
+            this.bazaPoint.sizeWindow(w,h,s)     
   		}
 
         this.getObj= function(){          
@@ -65,7 +76,8 @@ export class Scane  {
         if (this._index != value) {
             this._index = value;  
             this.map.index=value;    
-            this.word.index=value;         
+            this.word.index=value; 
+            this.bazaPoint.index=value;        
         }
     }
     get index() { return this._index; } 

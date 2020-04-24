@@ -453,7 +453,7 @@ Object.defineProperties(BoxXZ.prototype, {
             if (this._activ == value) return;
             this._activ = value;
            // this._color=this._color1;
-            trace("@@@@@@@@@@@@@@@@@@@")
+          
 
             if(this._activ){
                 this.image.link=this.object.src1;

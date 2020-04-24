@@ -18,9 +18,9 @@ export class Word  {
         this.height=100;
 
 
-        trace(this.visi3D.utility.sky)
-        this.visi3D.utility.sky.active=true
-        //this.visi3D.utility.sky.link="resources/image/button0_.png"
+    
+        this.visi3D.utility.sky.active=true;
+
 
 
 
@@ -29,7 +29,7 @@ export class Word  {
 
         //ап дете сцена деленая на 2 в мейне
         this.update = function () {
-           
+            
         }
 
         var w,h,s
@@ -49,6 +49,7 @@ export class Word  {
             this._index = value;
             if(this.confScane.array[value])this.visi3D.utility.sky.link=this.confScane.array[value].src
             
+
                    
             
         }

@@ -15,6 +15,7 @@ import {PCentorVerg } from './PCentorVerg.js';
 
 import {PNiz} from './PNiz.js';
 import {PMap} from './PMap.js';
+import {PPoint} from './PPoint.js';
 
 export class PMenu  {
   	constructor(par,fun) {  		
@@ -51,56 +52,13 @@ export class PMenu  {
             self.fun(s,p);
         });
 
-
-
-        /*const bottomInfoArray = [
-            'some text\nnext line',
-            `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc pulvinar aliquet justo vitae varius. Nulla at interdum diam, vitae pretium nulla. Aenean eu consequat lorem. Quisque laoreet nunc orci, ut vulputate ex faucibus et. Maecenas sagittis nisi vel est finibus, vel placerat velit tristique. Sed nibh neque, consequat sit amet sem eu, pretium feugiat lectus. Sed at purus enim.
-            Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla pellentesque mi sit amet lorem dapibus, vitae egestas diam cursus. Donec maximus massa eget purus tincidunt laoreet. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Fusce nec mollis erat. Mauris non nulla tristique, egestas nisl at, fringilla massa. Sed euismod vestibulum orci, quis consequat orci ornare molestie. Praesent quis arcu congue, convallis urna eget, consequat odio. Praesent fringilla volutpat elit, eu auctor mauris hendrerit luctus.`
-        ]*/
-/*
-
-        this.dCont=new DCont(par.dCont);
-        this.dragPic=new DDragPic(null);
-        dcmParam.activButton="#f28044";
-
-        this.mVerh=undefined
-
-        this.mLeft = new MLeft(this,function(s,p){
+        this.array[4]=this.pPoint=new PPoint(this, function(s,p){
             self.fun(s,p);
-        });        
-        this.bottomInfo = new MStepInfo(this, 
-            this.fun, 
-            [
-                'Укажите высоту от пола первого этажа до потолка и толщину перекрытияю\nДвигайте синими кнопками.',
-                'Укажите размеры проема и наличие стен.\nМожно выпрать прямоугольный и г опбразнный вариант.',
-                'Наличие стен на втором этаже.',
-                'Укажите ночальную точку, со второго этажа и направление лестницы на первый этаж',
-                'Можете добавить стены на первом этаже',
-                'Можете добавить проемы на стены первого этажа' 
-            ], 
-            ['resources/data/50/100.png','resources/data/49/100.png']
-        );
+        });
 
-        //this.mTipVisi = new MTipVisi(this, this.dCont, this.fun)
-
-        if(this.debug==true){
-            this.mVerh = new MVerh(this,function(s,p){
-                self.fun(s,p);
-            });
-        }    
-
-        this.mInfo = new MInfo(par.dCont);
-
-
-        this.dragPic.dC=par.dCont
-
-*/
 
     
-  		this.sizeWindow = function(w,h,s) {
-           // if (this.mVerh) this.mVerh.sizeWindow(w, h, s);
-          //  this.bottomInfo.sizeWindow(w, h, s); 
+  		this.sizeWindow = function(w,h,s) { 
             for (var i = 0; i < this.array.length; i++) {
                 if(this.array[i])if(this.array[i].sizeWindow)this.array[i].sizeWindow(w,h,s)
             }          
@@ -112,6 +70,17 @@ export class PMenu  {
 
   	}
 
+    set index(value) {
+        if (this._index != value) {
+            this._index = value; 
+            this.pPoint.index = value; 
+        }        
+            
+    }
+    get index() { return this._index; }
+
+    
+
 
     set indexSah(value) {
         if (this._indexSah != value) {
@@ -119,39 +88,10 @@ export class PMenu  {
             this.pCentorVerg.indexSah=value;
             this.pNiz.indexSah=value;
             this.pMap.indexSah=value;
+            this.pPoint.indexSah=value;
         }        
             
     }
     get indexSah() { return this._indexSah; }
-/*
-    set id(value) {
-        if(this._id!=value){
-            this._id= value; 
-            this.mProdject.id=value;  
-            this.mVerh.id=value;          
-        }
-    }    
-    get id() { return  this._id;}  
-    
-    set index(value) {
-        if (this._index != value) {
-            this._index = value;            
-            this.mLeft.index=value;
-            this.bottomInfo.index = value
-        }
-    }
-    get index() { return this._index; }
-
-    set tipVisi(value) {
-        if(this._tipVisi !== value) {
-            this._tipVisi  = value;
-            this.bottomInfo.tipVisi  = value;
-         
-            trace("@@@@@@@@@@@@@@@@",value)
-        }        
-    }
-    get tipVisi() {
-        return this._tipVisi
-    }*/
 }
 

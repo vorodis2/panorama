@@ -125,7 +125,7 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 	this.group = new THREE.Object3D();
 	this.group.rotation.x = Math.PI / 2;	
 	this.scene.add(this.group);
-	
+
 	this.group1 = new THREE.Object3D();
 	this.group.add(this.group1);
 	this.group2 = new THREE.Object3D();
@@ -135,6 +135,27 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 
 	this.group3d = new THREE.Object3D();
 	this.groupObject.add(this.group3d);
+
+
+
+	this.gp = new THREE.Object3D();
+	this.gp.rotation.x = Math.PI / 2;	
+	this.scene.add(this.gp);
+
+	this.gp1 = new THREE.Object3D();
+	this.gp.add(this.gp1);
+	this.gp2 = new THREE.Object3D();
+	this.gp1.add(this.gp2);
+	this.gpObject = new THREE.Object3D();
+	this.gp2.add(this.gpObject);
+
+	this.gpObject.position.z=1
+	this.gpObject.scale.set(0.001,0.001,0.001)
+
+
+
+
+
 
 	this.gCGG = new THREE.Object3D();
 	this.group.add(this.gCGG);
@@ -253,6 +274,9 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 		this.camera.updateProjectionMatrix();
 		this.renderer.setSize(this._width, this._height);
 		this.intRend = 1;
+
+		trace(this.camera.aspect)
+		this.gpObject.scale.set(0.003/this.camera.aspect,0.001,0.001)
 
 		if (this.event3DArr) {
 			this.event3DArr.sizeWindow(this._width, this._height);
@@ -395,8 +419,9 @@ MVisi3D.prototype = {
 		if (this._rotationX === v) return;
 		this._rotationX = v;
 		this.intRend = 1;
-		this.gCam2.rotation.x = v;		
-		if(this.fun_rotationX)this.fun_rotationX()
+		this.gCam2.rotation.x = v;	
+		this.gp2.rotation.x = v;		
+		if(this.fun_rotationZ)this.fun_rotationZ()
 	},
 	get rotationX () {
 		return this._rotationX;
@@ -405,6 +430,7 @@ MVisi3D.prototype = {
 		if (this._rotationZ === v) return;
 		this._rotationZ = v;
 		this.gCam1.rotation.z = v;
+		this.gp1.rotation.z = v;
 		this.intRend = 1;
 		if(this.fun_rotationZ)this.fun_rotationZ()
 	},

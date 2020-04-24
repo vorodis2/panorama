@@ -74,7 +74,7 @@ export class Map  {
         }
 
         this.fun_rotationZ = function () {             
-            trace(self.visi3D.rotationX, self.visi3D.rotationZ, "   ",self.visi3D.zume);
+            
             this.c2dGiro.rotation=self.visi3D.rotationZ
 
             self.intRend=0;
@@ -101,8 +101,7 @@ export class Map  {
 
 
 
-        trace("this.visi3D",this.visi3D)
-
+     
 
 
 
@@ -125,7 +124,7 @@ export class Map  {
             let s=self.getSprite(self.pointLocal);
             if(s!=null) {
                 fun("setIndex",s.idArr);
-               // trace("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",s)
+               
             }
         }
 
@@ -328,7 +327,7 @@ export class MBlok  {
     set active(v) {
         if(this._active!=v){
             this._active = v;  
-            trace(">>>>>>>>>>>>>>>>>>>",v)          
+                  
             this.arrImeg[0].visible=!v;
             this.arrImeg[1].visible=v;
             this.par.intRend=0;
