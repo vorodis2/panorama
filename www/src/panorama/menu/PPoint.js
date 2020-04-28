@@ -19,6 +19,10 @@ export class PPoint extends MOBaza {
         this.dContB=new DCont(this.dCont);
         this.visi3D= this.par.par.visi3D;
 
+        this.pOpen = new PPointOpen(this,function(s,p){
+
+        })
+
         var aBut=false
         var aBut1=false
         this.arrConf=[];
@@ -64,17 +68,13 @@ export class PPoint extends MOBaza {
 
 
 
-
-
             this.visi3D.utility.sky.mesh.name="skyMesh"
             this.visi3D.addChildMouse(this.visi3D.utility.sky.mesh)
-            this.visi3D.addEvent("down",function(e){                
+            this.visi3D.addEvent("down",function(e){ 
+                            
                 if(aBut)
                 if(e!=null&&e.target){
-                    if(e.target.uuid==self.visi3D.utility.sky.mesh.uuid){
-                        /*x:e.point.x,
-                            y:e.point.y,
-                            z:e.point.z,*/
+                    if(e.target.uuid==self.visi3D.utility.sky.mesh.uuid){                        
                         var o={
                             time:new Date().getTime(),
                             x:e.point.x,
@@ -90,14 +90,13 @@ export class PPoint extends MOBaza {
 
                         mainBig.objectBase.points.array.push(o);
                         self.par.par.locSave.saveTime();
-
                         self.fun("dragPoint");
-
+                        mainBig.glaf.scPixi.render(); 
                     } 
                     return;                  
                 }
                
-                if(aBut1&&e!=null&&e.target&&e.target.blok){                    
+               /* if(aBut1&&e!=null&&e.target&&e.target.blok){                    
                     let p=-1;
                     for (var i = 0; i < mainBig.objectBase.points.array.length; i++) {
                         if(mainBig.objectBase.points.array[i].time==e.target.blok.object.time)p=i
@@ -126,19 +125,15 @@ export class PPoint extends MOBaza {
                     if(dcmParam.mobile==false){            
                         document.addEventListener("mouseup", self.mouseup);
                     }else{                  
-                        document.addEventListener("touchend", self.mouseup);
-                        
+                        document.addEventListener("touchend", self.mouseup);                        
                     }
-                }
+                }*/
 
             })
 
-            this.move=function(e){
-                
+            this.move=function(e){                
                 if(e!=null&&e.target){
                     if(e.target.uuid==self.visi3D.utility.sky.mesh.uuid){
-                        trace(e.point);
-                        trace(blok);
                         blok.object.x=e.point.x;
                         blok.object.y=e.point.z;
                         blok.object.z=-e.point.y;
@@ -147,10 +142,7 @@ export class PPoint extends MOBaza {
                         self.visi3D.intRend = 1;
                         blok.par.drag2d()
                         self.par.par.locSave.saveTime();
-
-                        /*x:e.point.x
-                        y:e.point.z
-                        z:-e.point.y*/
+                        self.pOpen.active=false
                     }
                 }
             }
@@ -160,14 +152,59 @@ export class PPoint extends MOBaza {
                 self.visi3D.removeEvent("move",self.move);
                 self.visi3D.position3d.pause=false
                 self.visi3D.event3DArr.poiskName='xzPoisk'
+                blok=undefined;
+
                 if(dcmParam.mobile==false){            
                     document.removeEventListener("mouseup", self.mouseup);
                 }else{                  
-                    document.removeEventListener("touchend", self.mouseup);
-                    
+                    document.removeEventListener("touchend", self.mouseup);                    
                 }
             }
+        }
 
+
+        this.setIndexBasa= function(objB) { 
+            if(mainBig.debug==true){
+                if(aBut1){//удоляшка                    
+                    let p=-1;
+                    for (var i = 0; i < mainBig.objectBase.points.array.length; i++) {
+                        if(mainBig.objectBase.points.array[i].time==objB.object.time)p=i
+                    }
+                    if(p!=-1){
+                        mainBig.objectBase.points.array.splice(p,1)
+                        self.par.par.locSave.saveTime();
+                        self.fun("dragPoint");
+                    } 
+                    return;                 
+                }
+
+                if(!aBut1&&!aBut){
+                    let p=-1;
+                    for (var i = 0; i < mainBig.objectBase.points.array.length; i++) {
+                        if(mainBig.objectBase.points.array[i].time==objB.object.time)p=i
+                    }
+                    arKu=mainBig.objectBase.points.array[p];
+
+                    blok=objB                    
+                    self.visi3D.event3DArr.poiskName=self.visi3D.utility.sky.mesh.name
+
+                    self.visi3D.position3d.pause=true
+                    self.visi3D.addEvent("move",self.move);
+                    if(dcmParam.mobile==false){            
+                        document.addEventListener("mouseup", self.mouseup);
+                    }else{                  
+                        document.addEventListener("touchend", self.mouseup);                        
+                    } 
+                                       
+                }
+
+                
+            }
+            this.pOpen.setIndexBasa(objB)
+        }
+
+        this.fun_rotationZ= function() {          
+            this.pOpen.active=false
         }
 
         var w,h,s
@@ -177,7 +214,7 @@ export class PPoint extends MOBaza {
                 h=_h;
                 s=_s;
             }
-            this.dContB.y=h/s-this.but0.wh*2-120;
+            if(this.dContB&&this.but0)this.dContB.y=h/s-this.but0.wh*2-120;
         }
 
 
@@ -241,6 +278,45 @@ export class ButTu  {
             }else{
                 this.batton.loadImeg(this.arr[0])
             }
+        } 
+    }
+    get active() { return this._active; }
+}
+
+
+export class PPointOpen extends MOBaza {
+    constructor(par,fun) {  
+        super(par,fun);
+        this.type="PPointOpen";
+        this.dCont=new DCont(par.dCont);
+        this._active=false
+        this.dCont.visible = this._active;
+
+        this.image=new DImage(this.dCont,0,0,null,function(){
+            this.visible=true;
+            this.width=this.picWidth;
+            this.height=this.picHeight;
+            this.y=-this.height/2;            
+        })
+        this.image.visible=false;
+
+       // new DPanel(this.dCont)
+
+        this.setIndexBasa= function(objB) { 
+            trace("setIndexBasa",objB)
+            this.dCont.x=objB.content2d.x
+            this.dCont.y=objB.content2d.y
+            this.active=true;
+            this.image.link=objB.object.info.demo
+        }
+
+
+    }
+    set active(value) {
+        if (this._active != value) {
+            this._active = value;
+            this.dCont.visible = value
+
         } 
     }
     get active() { return this._active; }

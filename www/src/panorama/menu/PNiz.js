@@ -158,12 +158,17 @@ export class PNiz extends MOBaza {
 
         this.object=undefined    
         this.openObj= function(obj){ 
-            this.window.visible=true;
-            this.object=obj;            
-            this.battonLoad.text=this.object.src;
-            this.battonLoad1.text=this.object.src1;
-            this.input.text=this.object.title
-            this.input1.text=this.object.key
+            if(this.window){
+                this.window.visible=true;
+                this.object=obj;            
+                this.battonLoad.text=this.object.src;
+                this.battonLoad1.text=this.object.src1;
+                this.input.text=this.object.title
+                this.input1.text=this.object.key
+
+            }
+
+            
         }
 
 

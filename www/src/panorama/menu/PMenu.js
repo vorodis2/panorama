@@ -57,6 +57,14 @@ export class PMenu  {
         });
 
 
+        this.setIndexBasa= function(p) {          
+            this.pPoint.setIndexBasa(p) 
+        }
+
+        this.fun_rotationZ= function() {          
+            this.pPoint.fun_rotationZ() 
+        }
+
     
   		this.sizeWindow = function(w,h,s) { 
             for (var i = 0; i < this.array.length; i++) {

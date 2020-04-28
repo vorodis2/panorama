@@ -1,6 +1,6 @@
 
 
-
+import {XZImage} from './DebbugPixi.js';
 
 export class BPBlok  {
   	constructor(par, obj, fun) {          
@@ -20,7 +20,7 @@ export class BPBlok  {
 
         this.bMat=this.par.bdIco.array[obj.ico]
 
-        this.ss=0.015
+        this.ss=0.31
 
 
         this.content3d = new THREE.Object3D();
@@ -29,10 +29,19 @@ export class BPBlok  {
 
 
 
-        this.c2d = new THREE.Object3D();        
+        this.content2d = new PIXI.Container();
+        
+  
+
+
+
+
+
+       /* this.c2d = new THREE.Object3D();        
         this.mesh = new THREE.Mesh(this.par.bdIco.gCylinder,this.par.bdIco.mDebag);
-        this.mesh.rotation.x=Math.PI/2
+        this.mesh.rotation.x=Math.PI/2;
         this.c2d.add(this.mesh);
+
 
         this.mesh.scale.set(this.ss*this.bMat.radius,0.001,this.ss*this.bMat.radius);
         this.mesh.blok=this;
@@ -40,10 +49,24 @@ export class BPBlok  {
         this.mesh1 = new THREE.Mesh(this.par.bdIco.gPlan,this.bMat.material);
         this.mesh1.scale.set(this.ss*this.bMat.wh,this.ss*this.bMat.wh,this.ss*this.bMat.wh);
         this.mesh1.rotation.x=Math.PI;
-        this.c2d.add(this.mesh1);
 
+        this.c2d.add(this.mesh1);*/
 
+        this.arrayImage=[]
+        for (var i = 0; i < 4; i++) {
+            this.arrayImage[i]=new XZImage(this.content2d,-this.bMat.wh/2,-this.bMat.wh/2, this.bMat.obj.aPic[i])
+            this.arrayImage[i].width=this.arrayImage[i].height=this.bMat.wh
+            this.arrayImage[i].visible=false
+        }
 
+        this.graphics = new PIXI.Graphics();
+        this.content2d.addChild(this.graphics);
+        this.graphics.beginFill(0xff0000, 0.5);
+        this.graphics.drawCircle(0,0,this.bMat.radius);
+        this.graphics.interactive = true;
+        this.graphics.buttonMode = true;
+
+        this.graphics.blok=true
 
 
         this.pNull=new THREE.Vector3(0,0,0);
@@ -56,26 +79,18 @@ export class BPBlok  {
         }
 
         this.drag2d = function () {
-            //this.content3d.updateMatrixWorld();
             let p=this.content3d.localToWorld(this.pNull.clone());
-
-            this.toScreenXY(p)
-
-            
-
-            this.c2d.position.x = vectorScreen.x*this.par.bdIco.scale;
-            this.c2d.position.y = vectorScreen.y*this.par.bdIco.scale;
-
-
-           // trace(this.idArr+"  ",vectorScreen, p)
+            this.toScreenXY(p);
+            this.content2d.x=vectorScreen.x;
+            this.content2d.y=vectorScreen.y;
         }
 
-        /*vS1=this.toScreenXY(this.content3d.localToWorld(this.position.clone()));*/
+
         var vectorScreen = new THREE.Vector2(0,0);  
         this.toScreenXY = function(vector3) { //
             vector3.project( visi3D.camera );
-            vectorScreen.x = Math.round( (   vector3.x  ) * visi3D._width);
-            vectorScreen.y = Math.round( ( - vector3.y  ) * visi3D._height);            
+            vectorScreen.x = Math.round( (   vector3.x  ) * visi3D._width/2+visi3D._width/2);
+            vectorScreen.y = Math.round( ( - vector3.y  ) * visi3D._height/2+visi3D._height/2);            
         }
 
 
@@ -95,21 +110,37 @@ export class BPBlok  {
                     sah=1;
                 }
             }
-            
-            if(this.mesh1.xzSah!=sah){
-                this.mesh1.xzSah=sah;
-                this.mesh1.material=this.bMat.aM[sah];
-                this.par.visi3D.intRend=1
+            for (var i = 0; i < this.arrayImage.length; i++) {               
+                if(i==sah)this.arrayImage[i].visible=true;
+                else this.arrayImage[i].visible=false;
             }
+        }
+        this.dragActive();
+        this.setObject(obj);  
 
 
+        this.onDown = function (e) {
+            self.fun("indexBasa", self); 
+            mainBig.glaf.scPixi.render(); 
+        }
+
+        this.mouseOut = function (e) {
+            self.active1=false;
+            mainBig.glaf.scPixi.render(); 
+        }
+
+        this.mouseOver = function (e) {
+            self.active1=true;
+            mainBig.glaf.scPixi.render(); 
         }
 
 
+        this.graphics.on('mousedown', this.onDown);
+        this.graphics.on('mouseout', this.mouseOut);
+        this.graphics.on('mouseover', this.mouseOver);
 
-        this.setObject(obj)
 
-       
+
   	} 
 
     set active(value) {
@@ -134,12 +165,10 @@ export class BPBlok  {
             this._life = value; 
             if(value==true) {              
                 this.par.content3d.add(this.content3d);
-                this.par.c2d.add(this.c2d);
-                this.par.visi3D.addChildMouse(this.mesh)
-            }   else{
-                this.par.content3d.remove(this.content3d);
-                this.par.c2d.remove(this.c2d);
-                this.par.visi3D.removeChildMouse(this.mesh)
+                this.par.content2d.addChild(this.content2d);
+            }else{
+                this.par.content3d.remove(this.content3d);                
+                this.par.content2d.removeChild(this.content2d);
             }             
             
         }

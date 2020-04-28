@@ -148,7 +148,6 @@ export default function MEvent3DArr (par, camera, contentHTML, stage) {
 	this.getNameEvent = function (str) {
 		this.restartPoint();
 		this.rayPusk();
-
 		if (this.intersects.length != 0) {
 			for (var i = 0; i < this.intersects.length; i++) {
 				if (this.intersects[i].object.parent != undefined) {

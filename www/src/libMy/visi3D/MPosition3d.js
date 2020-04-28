@@ -1,6 +1,4 @@
-import MUtility from './MUtility.js';
-import MSky from './MSky.js';
-import MSmc from './MSmc.js';
+
 
 export default function MPosition3d (_parent, _content2d, _div) {
 	var self = this;
@@ -239,19 +237,34 @@ export default function MPosition3d (_parent, _content2d, _div) {
 
 	
 	
-	if (self.devas==false) {
-		_div.addEventListener('mousedown', this.mouseDown);	
-		var v="mousewheel";
-		//DOMMouseScroll
-		//if()		
-		_div.addEventListener("mousewheel", this.mousewheel);
-		_div.addEventListener("DOMMouseScroll", this.mousewheel);
-		
-	} else {
-		_div.addEventListener('touchstart', this.mouseDown, { passive: false, capture: true });						
-	}
-
 	
+
+	this.mouseDown2=function(e){
+		self.mouseDown(e.data.originalEvent)		
+	}	
+
+	if (this.content2d != undefined) {
+		this.sPixi = this.content2d//this.getStage(this.content2d);
+		this.sPixi.interactive = true;
+
+		if (self.devas == false) {
+			this.content2d.on('mousedown', this.mouseDown2);
+			//pl102Wheel.on(_content2d, 'mousewheel', this.mousewheel);
+		} else {
+			this.content2d.on('touchstart', this.mouseDown2);
+		}
+	}else{
+		
+		if (self.devas==false) {
+			_div.addEventListener('mousedown', this.mouseDown);	
+			var v="mousewheel";
+			_div.addEventListener("mousewheel", this.mousewheel);
+			_div.addEventListener("DOMMouseScroll", this.mousewheel);
+			
+		} else {
+			_div.addEventListener('touchstart', this.mouseDown, { passive: false, capture: true });						
+		}	
+	}
 
 	
 

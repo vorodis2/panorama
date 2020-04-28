@@ -15,6 +15,9 @@ import { MVisi3D } from '../libMy/visi3D/MVisi3D.js';
 import { SceneSB } from '../libMy/visi3D/SceneSB.js';
 
 import { Scane } from './scane/Scane.js';
+
+import { DebbugPixi } from './scane/DebbugPixi.js';
+
 export class Glaf  {
   	constructor(main) {  		
   		this.type="Glaf";
@@ -47,6 +50,8 @@ export class Glaf  {
         this.dCPixi.visible=false;
 
 
+
+
         this.locSave=new LocSave(this)
         this.saveLoacal=new SaveLoacal(this)
         /*this.saveProdukt=new SaveProdukt(this)*/
@@ -58,28 +63,45 @@ export class Glaf  {
         this.resurs="resources/";         
         //new Calc();    
 
+        this.scPixi=new DebbugPixi();
+        //this.scPixi.deb.drawPoint(255,255,22);
+        main.contentHTML.appendChild(this.scPixi.div);
+        this.content2d = new PIXI.Container();
+        this.scPixi.content2d.addChild(this.content2d);
+
+
         //порезаный от пикси вювер
-        this.visi3D = new MVisi3D(main.contentHTML, null, dcmParam.mobile, true, false, true, true);     
+        this.visi3D = new MVisi3D(main.contentHTML, this.content2d, dcmParam.mobile, true, false, true, true);     
         //this.visi3D.yes3d = true;           
         this.visi3D.groupObject.add(this.content3d);
         global.visi3D=this.visi3D;
 
+
         //ловим и откидываем на сцену изменение камеры
-        this.visi3D.fun_rotationZ = function () { 
-            //trace(self.visi3D.rotationX, self.visi3D.rotationZ, "   ",self.visi3D.zume);
-            if(self.scane)self.scane.fun_rotationZ()
+        this.visi3D.fun_rotationZ = function () {             
+            if(self.scane){
+                self.scane.fun_rotationZ();
+                self.menu.fun_rotationZ();
+            }
         }
-
-
 
         this.rec=function(c){            
             if(c.parent)this.rec(c.parent)
-        }        
+        }
+
+        this.visi3D.arrayDoRender.push(function(){
+            self.scane.bazaPoint.drag2d()
+            self.scPixi.render();  
+        })
+
+
+
 
 
         //хрень принемашка ресурсов и настроек камеры для 
         var o='{"ambient":{"works":true,"active":true,"color":"#fdffff","intensity":0.71},"shadow":{"works":true,"active":true,"mapSize":4096,"color":"#8c8c8c","bias":-0.0014,"intensity":1.01,"radius":1.27,"bAlphaForCoating":false,"fixation":true,"rotationX":0.93,"rotationZ":0.73,"distance":500,"cubWidth":1000,"cubHeight":1000,"distanceUpdateShadow":65.41},"sky":{"works":true,"active":true,"color":"#ffffff","link":"null","rotZ":2.73,"radius":7008,"x":0,"y":0,"z":0},"mirror":{"works":true,"link":"resources/scane/sky/fon1.jpg","exposure":1.44,"gamma":2.87,"xz":"reflect","link1":"resources/scane/sky/fon1.jpg","exposure1":-1,"gamma1":-1},"visi3D":{"works":true,"alwaysRender":true,"fov":16,"far":47175,"minZum":0,"maxZum":1,"zume":1,"minRotationX":1.9,"maxRotationX":0,"rotationX":0.94,"rotationZ":0.17,"debug":false,"isDragPan":true,"alphaAd":false,"globZ":0,"powerZum":1},"fog":{"works":true,"active":false,"color":"#ffffff","near":0,"far":0},"effect":{"works":true,"active":false,"edgeStrength":3,"edgeGlow":0,"pulsePeriod":0,"linkTextur":"null","visibleEdgeColor":"#ffffff","hiddenEdgeColor":"#190a05"}}'
-
+        var o='{"ambient":{"works":true,"active":true,"color":"#fdffff","intensity":0.71},"shadow":{"works":true,"active":true,"mapSize":4096,"color":"#8c8c8c","bias":-0.0014,"intensity":1.01,"radius":1.27,"bAlphaForCoating":false,"fixation":true,"rotationX":0.93,"rotationZ":0.73,"distance":500,"cubWidth":1000,"cubHeight":1000,"distanceUpdateShadow":65.41},"sky":{"works":true,"active":true,"color":"#ffffff","link":"null","rotZ":2.73,"radius":7008,"x":0,"y":0,"z":0},"mirror":{"works":true,"link":"resources/scane/sky/fon1.jpg","exposure":1.44,"gamma":2.87,"xz":"reflect","link1":"resources/scane/sky/fon1.jpg","exposure1":-1,"gamma1":-1},"visi3D":{"works":true,"alwaysRender":true,"fov":16,"far":47175,"minZum":0,"maxZum":10942,"zume":289,"minRotationX":1.9,"maxRotationX":0,"rotationX":0.94,"rotationZ":0.17,"debug":false,"isDragPan":false,"alphaAd":false,"globZ":0,"powerZum":1},"fog":{"works":true,"active":false,"color":"#ffffff","near":0,"far":0},"effect":{"works":true,"active":false,"edgeStrength":3,"edgeGlow":0,"pulsePeriod":0,"linkTextur":"null","visibleEdgeColor":"#ffffff","hiddenEdgeColor":"#190a05"}}'
+        var o='{"ambient":{"works":true,"active":true,"color":"#fdffff","intensity":0.71},"shadow":{"works":true,"active":true,"mapSize":4096,"color":"#8c8c8c","bias":-0.0014,"intensity":1.01,"radius":1.27,"bAlphaForCoating":false,"fixation":true,"rotationX":0.93,"rotationZ":0.73,"distance":500,"cubWidth":1000,"cubHeight":1000,"distanceUpdateShadow":65.41},"sky":{"works":true,"active":true,"color":"#ffffff","link":"null","rotZ":2.73,"radius":7008,"x":0,"y":0,"z":0},"mirror":{"works":true,"link":"resources/scane/sky/fon1.jpg","exposure":1.44,"gamma":2.87,"xz":"reflect","link1":"resources/scane/sky/fon1.jpg","exposure1":-1,"gamma1":-1},"visi3D":{"works":true,"alwaysRender":false,"fov":16,"far":47175,"minZum":0,"maxZum":10942,"zume":289,"minRotationX":1.9,"maxRotationX":0,"rotationX":0.94,"rotationZ":0.17,"debug":false,"isDragPan":false,"alphaAd":false,"globZ":0,"powerZum":1},"fog":{"works":true,"active":false,"color":"#ffffff","near":0,"far":0},"effect":{"works":true,"active":false,"edgeStrength":3,"edgeGlow":0,"pulsePeriod":0,"linkTextur":"null","visibleEdgeColor":"#ffffff","hiddenEdgeColor":"#190a05"}}'
 
         var scene=JSON.parse(o)
         this.sceneSB=new SceneSB(this.visi3D);
@@ -90,8 +112,7 @@ export class Glaf  {
             this.sceneSB.array[i].setBasa(scene[this.sceneSB.array[i].name]);
         }
 
-        this.menu=new PMenu(this,function(s,p){   
-            trace(s,p)  
+        this.menu=new PMenu(this,function(s,p){               
             if(s=="indexSah"){
                 self.indexSah = p;
                 self.saveLoacal.save() 
@@ -106,6 +127,9 @@ export class Glaf  {
                 self.index=p;
                 self.saveLoacal.save() 
             }
+            if(s=="indexBasa"){                
+                self.menu.setIndexBasa(p)
+            }            
         })
 
 
@@ -124,9 +148,11 @@ export class Glaf  {
             this.menu.sizeWindow(w,h,s); 
             this.scane.sizeWindow(w,h,s);
             this.visi3D.sizeWindow(0,0,w,h);
-            /*this.stairs.sizeWindow(w,h,s);         
-            
-            this.mInfo.sizeWindow(w,h,s); */           
+
+            self.scPixi.width=w;
+            self.scPixi.height=h;           
+            self.scPixi.render()
+                      
   		}
 
         this.getObj= function(){          

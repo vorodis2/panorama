@@ -101,13 +101,14 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 
 	
 	_contentHTML.appendChild(this.renderer.domElement);
+	this.renderer.domElement.style.zIndex = -10;
 	this.event3DArr;
 	if (_event3DArr == true) {
 		
-		this.event3DArr = new MEvent3DArr(this, this.camera, this.renderer.domElement);
+		this.event3DArr = new MEvent3DArr(this, this.camera, document.body);
 		this.scene.event3DArr = this.event3DArr;
 
-		this.event3DArr.addDragEvent(this.graphics, this.renderer.domElement)// _contentHTML);
+		this.event3DArr.addDragEvent(this.graphics, document.body)// _contentHTML);
 
 
 		this.event3DArr.activ = this._activMouse;
@@ -148,11 +149,14 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 	this.gp1.add(this.gp2);
 	this.gpObject = new THREE.Object3D();
 	this.gp2.add(this.gpObject);
+	this.gpObject2 = new THREE.Object3D();
+	this.gp2.add(this.gpObject2);
 
 	this.gpObject.position.z=1
 	this.gpObject.scale.set(0.001,0.001,0.001)
 
-
+	this.gpObject2.position.z=1
+	this.gpObject2.scale.set(0.001,0.001,0.001)
 
 
 
@@ -275,8 +279,12 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 		this.renderer.setSize(this._width, this._height);
 		this.intRend = 1;
 
-		trace(this.camera.aspect)
-		this.gpObject.scale.set(0.003/this.camera.aspect,0.001,0.001)
+
+		let ssX=0.00087
+		let ssX1=ssX*this.camera.aspect	
+		this.gpObject2.scale.set(ssX1,ssX,1)
+
+		this.gpObject.scale.set(ssX1/(this._width/1000),ssX/(this._height/1000),1);
 
 		if (this.event3DArr) {
 			this.event3DArr.sizeWindow(this._width, this._height);
@@ -377,8 +385,7 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
   		self.position3d.stageMoveNew(e);
         self.event3DArr.mousemove(e);
 	}
-	this.getFunMouseMove=function(){
-		
+	this.getFunMouseMove=function(){		
 		if(self.devas==false){
 			self.position3d.div.removeEventListener("mousemove", self.mousemove);		
 		}else{
@@ -387,12 +394,34 @@ export function MVisi3D (_contentHTML, _content2d, _devas, _directional, _efect,
 		return self.mousemove;
 	}
 	
-	if(self.devas==false) {	
-		self.position3d.div.addEventListener('mousemove', self.mousemove);		
-	} else {		
-		self.position3d.div.addEventListener('touchmove', self.mousemove);//, { passive: false, capture: true });					
+	if (_content2d == undefined) {
+		if(self.devas==false) {	
+			self.position3d.div.addEventListener('mousemove', self.mousemove);		
+		} else {		
+			self.position3d.div.addEventListener('touchmove', self.mousemove);//, { passive: false, capture: true });					
+		}
+	}else{
+		self.stageM2=function(e){
+			self.position3d.stageMoveNew(e.data.originalEvent);
+			self.event3DArr.mousemove(e.data.originalEvent);
+		}
+
+		if (self.devas==false) {			
+			this.graphics.on('mousemove', self.stageM2);		
+		}
+		else {			
+			this.graphics.on('touchmove', self.stageM2);
+		}
+
 	}
 
+
+
+	/*
+
+
+
+	*/
 
 	document.oncontextmenu = function disablecontext(e) { return false;  }
 
@@ -439,6 +468,9 @@ MVisi3D.prototype = {
 	},
 	set zume (v) {
 		if (this._zume === v) return;
+		//trace("this._zume   ",this._zume)
+		this.gpObject.position.z=-v+1;
+		this.gpObject2.position.z=-v+1;
 		this._zume = v;
 		this.ggCam.position.z = -v;
 		this.camera.position.z = 0;

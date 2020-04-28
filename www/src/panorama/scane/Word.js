@@ -47,11 +47,7 @@ export class Word  {
     set index(value) {
         if (this._index != value) {
             this._index = value;
-            if(this.confScane.array[value])this.visi3D.utility.sky.link=this.confScane.array[value].src
-            
-
-                   
-            
+            if(this.confScane.array[value])this.visi3D.utility.sky.link=this.confScane.array[value].src; 
         }
     }
     get index() { return this._index; } 

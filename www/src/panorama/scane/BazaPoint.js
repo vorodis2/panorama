@@ -19,11 +19,12 @@ export class BazaPoint  {
 
         this.c2d = new THREE.Object3D();
         this.visi3D.gpObject.add(this.c2d);
-       // this.c2d.position.z=1
+       // this.c2d.position.z=-100
 
 
-        
-
+        this.content2d = new PIXI.Container();
+        this.par.par.content2d.addChild(this.content2d);
+        //this.content2d.interactive = true;
 
 
 
@@ -37,24 +38,7 @@ export class BazaPoint  {
         this.bdIco=new BDIco(mainBig.objectBase.points.at);
 
 
-        this.mD = new THREE.Mesh(this.bdIco.gPlan,this.bdIco.mDebag);
-        this.c2d.add(this.mD)
-        this.mD.rotation.x=Math.PI
-        //this.mD.scale.set(10,10,1)
-
-
-
-
-
-        let sss=new DSliderBig(this.par.dCont,222,222,function(){
-            self.bdIco.scale=this.value;
-            self.drag2d()
-        },"scale",0.001,0.01)
-        sss.okrug=10000;
-        sss.width=300;
-        sss.value=self.bdIco.scale
-        
-
+     
 
 
         this.dCont=new DCont(this.par.dCont);   
@@ -68,8 +52,8 @@ export class BazaPoint  {
             for (var i = 0; i < this.array.length; i++) {
                 this.array[i].drag2d();
             }
-            this.visi3D.intRend = 1;
-            this.visi3D.render()
+           // this.visi3D.intRend = 1;
+            //this.visi3D.render()
         }
 
 
@@ -82,7 +66,12 @@ export class BazaPoint  {
 
 
         this.sobPoint = function (s,p) { 
-
+            if(s=="indexBasa"){
+                self.indexBasa=p.idArr;
+            }
+            
+            mainBig.glaf.scPixi.render(); 
+            self.fun(s,p)
         }
 
 
@@ -132,7 +121,12 @@ export class BazaPoint  {
 
 
 
-        this.down=function(e){            
+
+
+
+
+
+      /*  this.down=function(e){            
             if(e&&e.target&&e.target.blok){
                 self.indexBasa=e.target.blok.idArr;
             }
@@ -159,7 +153,23 @@ export class BazaPoint  {
 
         this.visi3D.addEvent("down",this.down);
         this.visi3D.addEvent("out",this.out);
-        this.visi3D.addEvent("over",this.over);
+        this.visi3D.addEvent("over",this.over);*/
+
+/*
+        if (pl102.isMouseEvents) {
+            this.graphInter.on('mousedown', this.onDown);
+            this.graphInter.on('mouseout', this.mouseOut);
+            this.graphInter.on('mouseover', this.mouseOver);
+        }
+        if (pl102.isTouchEvents) {
+            this.graphInter.on('touchstart', this.onDown);
+        }*/
+
+
+        
+
+
+
 
 
 
@@ -182,9 +192,9 @@ export class BazaPoint  {
             this.width=w;
             this.height=h;
             
-            this.mD.scale.set(w,h,1)
+            //this.mD.scale.set( w, h, 1)
 
-
+            //trace("@@@",w, h)
 
         }  		
   	} 
@@ -200,7 +210,8 @@ export class BazaPoint  {
 
     set indexBasa(value) {
         if (this._indexBasa != value) {
-            this._indexBasa = value;  
+            this._indexBasa = value; 
+            trace("this._indexBasa  ",this._indexBasa) 
             for (var i = 0; i < this.arrayCach.length; i++) {
                 if(i==this._indexBasa){
                     this.arrayCach[i].active=true
