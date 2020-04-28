@@ -26,9 +26,9 @@ export class BazaPoint  {
         this.par.par.content2d.addChild(this.content2d);
         //this.content2d.interactive = true;
 
+        global.bazaPoint=this
 
-
-        //this.content3d
+        
 
         this.arrConf=mainBig.objectBase.points.array
 
@@ -118,60 +118,12 @@ export class BazaPoint  {
         }
 
 
-
-
-
-
-
-
-
-
-      /*  this.down=function(e){            
-            if(e&&e.target&&e.target.blok){
-                self.indexBasa=e.target.blok.idArr;
+        this.debagDragPoint = function (num,w,r) {
+            for (var i = 0; i < this.arrayCach.length; i++) {
+                this.arrayCach[i].debagDragPoint(num,w,r)
             }
+
         }
-        this.out=function(e){            
-            if(e&&e.target&&e.target.blok){
-                window.document.body.style.cursor = "auto";                
-                e.target.blok.active1=true;
-            }
-            // 
-           
-        }
-        this.over=function(e){
-            
-
-            if(e&&e.target&&e.target.blok){
-                trace(">>>",e.target.blok)
-                window.document.body.style.cursor = "pointer";                  
-                e.target.blok.active1=false;
-            }            
-            
-        }
-
-
-        this.visi3D.addEvent("down",this.down);
-        this.visi3D.addEvent("out",this.out);
-        this.visi3D.addEvent("over",this.over);*/
-
-/*
-        if (pl102.isMouseEvents) {
-            this.graphInter.on('mousedown', this.onDown);
-            this.graphInter.on('mouseout', this.mouseOut);
-            this.graphInter.on('mouseover', this.mouseOver);
-        }
-        if (pl102.isTouchEvents) {
-            this.graphInter.on('touchstart', this.onDown);
-        }*/
-
-
-        
-
-
-
-
-
 
 
         //ап дете сцена деленая на 2 в мейне

@@ -53,7 +53,7 @@ export class BPBlok  {
         this.c2d.add(this.mesh1);*/
 
         this.arrayImage=[]
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 2; i++) {
             this.arrayImage[i]=new XZImage(this.content2d,-this.bMat.wh/2,-this.bMat.wh/2, this.bMat.obj.aPic[i])
             this.arrayImage[i].width=this.arrayImage[i].height=this.bMat.wh
             this.arrayImage[i].visible=false
@@ -61,12 +61,25 @@ export class BPBlok  {
 
         this.graphics = new PIXI.Graphics();
         this.content2d.addChild(this.graphics);
-        this.graphics.beginFill(0xff0000, 0.5);
+        this.graphics.beginFill(0xff0000, 0.0);
         this.graphics.drawCircle(0,0,this.bMat.radius);
         this.graphics.interactive = true;
         this.graphics.buttonMode = true;
 
         this.graphics.blok=true
+
+        this.debagDragPoint = function (num,w,r) {
+            if(num==this.ico){
+                for (var i = 0; i < this.arrayImage.length; i++) {  
+                    this.arrayImage[i].width=this.arrayImage[i].height=w;                    
+                    this.arrayImage[i].x=this.arrayImage[i].y=-w/2;
+                    this.graphics.clear();
+                    this.graphics.beginFill(0xff0000, 0.5);
+                    this.graphics.drawCircle(0,0,r);
+                }
+            }
+
+        }
 
 
         this.pNull=new THREE.Vector3(0,0,0);
@@ -98,21 +111,26 @@ export class BPBlok  {
         this.dragActive = function() { //
             let sah=0;
             if(this._active==true){
-                if(this._active1==true){
+                sah=1;
+                /*if(this._active1==true){
                     sah=2;
                 }else{
                     sah=3;
-                }
+                }*/
             }else{
-                if(this._active1==true){
+                /*if(this._active1==true){
                     sah=0;
                 }else{
                     sah=1;
-                }
+                }*/
             }
+
             for (var i = 0; i < this.arrayImage.length; i++) {               
-                if(i==sah)this.arrayImage[i].visible=true;
-                else this.arrayImage[i].visible=false;
+                if(i==sah)this.arrayImage[i].visible = true;
+                else this.arrayImage[i].visible = false;
+
+                if(this._active1)this.arrayImage[i].alpha=0.5
+                else this.arrayImage[i].alpha=1
             }
         }
         this.dragActive();

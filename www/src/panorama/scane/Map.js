@@ -30,7 +30,7 @@ export class Map  {
 
         this.scPixi=new DebbugPixi()
         this.dCont.div.appendChild(this.scPixi.div)
-        this.scPixi.deb.drawPoint(55,55);
+        //this.scPixi.deb.drawPoint(55,55);
 
         this.content2d = new PIXI.Container();
         this.c2dMap = new PIXI.Container();
@@ -45,8 +45,8 @@ export class Map  {
 
         this.init=function(){
             this.arrImeg[0]=new XZImage(this.content2d,0,0,this.arrFoto[0],function(){
-                self.scPixi.width=self.width=this.width=this.picWidth/2;
-                self.scPixi.height=self.height=this.height=this.picHeight/2;
+                self.scPixi.width=self.width=this.width=this.picWidth;
+                self.scPixi.height=self.height=this.height=this.picHeight;
 
                 
                 self.sizeWindow()
@@ -58,8 +58,8 @@ export class Map  {
         }
         this.init1=function(){
             this.arrImeg[1]=new XZImage(this.content2d,0,0,this.arrFoto[1],function(){
-                this.width=this.picWidth/2;
-                this.height=this.picHeight/2;                
+                this.width=this.picWidth;
+                this.height=this.picHeight;                
                 self.content2d.addChild(self.c2dGiro)             
                 self.init2();
 
@@ -68,10 +68,10 @@ export class Map  {
 
         this.init2=function(){//персонаж
             this.arrImeg[2]=new XZImage(this.c2dGiro,0,0,this.arrFoto[2],function(){
-                this.width=this.picWidth/2;
-                this.height=this.picHeight/2;
-                this.x=-this.width/2;
-                this.y=-this.height/2;                
+                this.width=this.picWidth;
+                this.height=this.picHeight;
+                this.x =-this.width/2;
+                this.y =-this.height/2;                
                 self.sizeWindow(); 
                 self.init3();
             })
@@ -198,8 +198,8 @@ export class Map  {
             for (var i = 0; i < this.array.length; i++) {
                 if(i==this.index){
                     this.array[i].active=true
-                    this.c2dGiro.x=this.array[i].obj.x;
-                    this.c2dGiro.y=this.array[i].obj.y;
+                    this.c2dGiro.x=this.array[i].obj.x-15;
+                    this.c2dGiro.y=this.array[i].obj.y-15;
                 }else{
                     this.array[i].active=false;
                 }                
@@ -278,8 +278,8 @@ export class MBlok  {
 
 
         this.arrImeg[0]=new XZImage(this.content2d,0,0,obj.src1,function(){
-            this.width=this.picWidth/2;
-            this.height=this.picHeight/2;
+            this.width=this.picWidth;
+            this.height=this.picHeight;
             self.par.intRend=0
 
             self.bitmapData=new DBitmapData(2,2,undefined,function(){
@@ -290,18 +290,18 @@ export class MBlok  {
         })
 
         this.arrImeg[1]=new XZImage(this.content2d,0,0,obj.src2,function(){
-            this.width=this.picWidth/2;
-            this.height=this.picHeight/2;
+            this.width=this.picWidth;
+            this.height=this.picHeight;
             self.par.intRend=0
         })
         this.arrImeg[1].visible=false;
 
 
         this.arrImeg[2]=new XZImage(this.content2d,0,0,par.arrFoto[3],function(){
-            this.width=this.picWidth/2;
-            this.height=this.picHeight/2;
-            this.x=obj.x-this.width/2;
-            this.y=obj.y-this.height/2;
+            this.width=this.picWidth;
+            this.height=this.picHeight;
+            this.x=obj.x-this.width;
+            this.y=obj.y-this.height;
             self.par.intRend=0;
         })
 
@@ -310,11 +310,11 @@ export class MBlok  {
         this.getSprite = function(p){
             if(this.bLoad==false)return null
 
-            let i=Math.round(p.x*2)
+            let i=Math.round(p.x)
             if(i<0) i=0
             if(i>self.bitmapData.width-1) i=self.bitmapData.width-1;
 
-            let j=Math.round(p.y*2)
+            let j=Math.round(p.y)
             if(j<0) j=0
             if(j>self.bitmapData.height-1) j=self.bitmapData.height-1;
 

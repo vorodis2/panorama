@@ -28,7 +28,7 @@ export class PCentorVerg extends MOBaza {
             this.arr=["resources/image/pic0.png","resources/image/pic1.png","resources/image/pic2.png"];
             this.arr2=["resources/image/pic0_.png","resources/image/pic1_.png","resources/image/pic2_.png"];
             this.array=[]
-            let ww=125;
+            let ww=145;
             let hh=100;
             for (var i = 0; i < this.arr.length; i++) {
                 this.array[i]=new DButton(this.dCont,0+i*(ww+this.otstup),0,"",function(){                    

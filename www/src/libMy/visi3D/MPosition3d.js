@@ -249,6 +249,10 @@ export default function MPosition3d (_parent, _content2d, _div) {
 
 		if (self.devas == false) {
 			this.content2d.on('mousedown', this.mouseDown2);
+			var v="mousewheel";
+			document.addEventListener("mousewheel", this.mousewheel);
+			document.addEventListener("DOMMouseScroll", this.mousewheel);
+
 			//pl102Wheel.on(_content2d, 'mousewheel', this.mousewheel);
 		} else {
 			this.content2d.on('touchstart', this.mouseDown2);

@@ -27,8 +27,63 @@ export class PPoint extends MOBaza {
         var aBut1=false
         this.arrConf=[];
 
-        var blok
+        var blok,blok1
         var arKu
+
+        ////////////////
+        this.arrAt=[];
+        this.atBut;
+        this.panel1
+        this.panel2
+        this.setIndexAt=function(num, idArr){
+            this.atBut=undefined
+            for (var i = 0; i < this.arrAt.length; i++) {
+                if(num==i){
+                    this.arrAt[i].alpha=0.5
+                    this.atBut=this.arrAt[i];
+                    this.panel1.visible=true
+                }
+                else this.arrAt[i].alpha=1;
+            }
+
+            if(this.atBut){
+                this.atS.value=this.atBut.objMy.wh;
+                this.atS1.value=this.atBut.objMy.radius;
+            }
+
+        }
+
+        this.setBlok=function(blok){
+            if(this.panel2){
+                blok1=blok
+                this.setIndexAt(blok.ico);
+                this.panel2.visible=true;
+            }
+        }
+
+        function uploadFile(dest, file,  fun) {
+            let serverURL =  "src/phpBase.php";
+            let data = new FormData();
+            data.append('tip', 'saveFile');
+            data.append('file', file);
+            data.append('dest', dest);              
+            $.ajax({
+                url: serverURL,
+                dataType: 'text',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: data,
+                type: 'post',
+                success: (function(data) {                    
+                    fun(data);                   
+                })
+            });
+        }
+
+
+
+        //////////////
         if(mainBig.debug==true){
 
             let b=false
@@ -37,24 +92,160 @@ export class PPoint extends MOBaza {
                 mainBig.objectBase.points.array=[];
             b=true}
 
-            //if(mainBig.objectBase.points.at==undefined){
+            if(mainBig.objectBase.points.at==undefined){
                 mainBig.objectBase.points.at=[]
                 mainBig.objectBase.points.at.push({ wh:40, radius:18, aPic:["resources/image/b0.png","resources/image/b1.png","resources/image/b2.png","resources/image/b3.png"]});
                 mainBig.objectBase.points.at.push({ wh:20, radius:8, aPic:["resources/image/b0.png","resources/image/b1.png","resources/image/b2.png","resources/image/b3.png"]});
+                mainBig.objectBase.points.at.push({ wh:20, radius:8, aPic:["resources/image/b0.png","resources/image/b1.png","resources/image/b2.png","resources/image/b3.png"]});
+                
                 b=true;
-            //}
+            }
 
 
             if(b)self.par.par.locSave.saveTime();
 
+            /////////////////////////////////
+            for (var i = 0; i < mainBig.objectBase.points.at.length; i++) {
+                this.arrAt[i]=new DButton(this.dCont, 50+i*34,200,"i"+i,function(){
+                    self.setIndexAt(this.idArr)  
+                    
+                    if(blok1){                        
+                        blok1.ico=this.idArr;
+                        let p=-1;
+                        for (var i = 0; i < mainBig.objectBase.points.array.length; i++) {
+                            if(mainBig.objectBase.points.array[i].time==blok1.object.time)p=i
+                        }                        
+                        if(p!=-1){
+                            blok1.object.ico=this.idArr;
+                            mainBig.objectBase.points.array[p].ico=this.idArr;                            
+                            self.par.par.locSave.saveTime();
+                            self.fun("dragPoint");
+                        } 
+                    }  
+                })
+                this.arrAt[i].idArr=i;
+                this.arrAt[i].width=this.arrAt[i].height;
+                this.arrAt[i].objMy=mainBig.objectBase.points.at[i]
+
+                
+            }
+            
 
 
-            this.but0=new ButTu(this.dContB,["resources/image/b0.png","resources/image/b1.png"],"give Text",function(){
+            this.panel1=new DPanel(this.dCont,50+i*34,200)
+            this.panel1.visible=false
+
+            let b0=new DButton(this.panel1, 0, 0,"0",function(){
+                if(this.files[0]){
+                    let a=this.files[0].name.split(".")
+                    let n=new Date().getTime()+"."+a[a.length-1]
+                    uploadFile("./../resources/d/"+n,this.files[0],function(s){   
+                        self.atBut.objMy.aPic[0] = "resources/d/"+n;                   
+                        self.par.par.locSave.saveTime();
+                    })
+                }   
+            })
+            b0.width=32
+            b0.startFile("image/*");
+
+            let b1=new DButton(this.panel1, 32, 0,"1",function(){
+                if(this.files[0]){
+                    let a=this.files[0].name.split(".")
+                    let n=new Date().getTime()+"."+a[a.length-1]
+                    uploadFile("./../resources/d/"+n,this.files[0],function(s){   
+                        self.atBut.objMy.aPic[1] = "resources/d/"+n;                   
+                        self.par.par.locSave.saveTime();
+                    })
+                }  
+            })
+            b1.width=32
+            b1.startFile("image/*");
+
+
+            this.atS=new DSliderBig(this.panel1,68,0,function(){
+                if(self.atBut){
+
+                    self.atBut.objMy.wh=this.value; 
+                    bazaPoint.debagDragPoint(self.atBut.idArr,self.atBut.objMy.wh,self.atBut.objMy.radius);
+                    visi3D.intRend =1                  
+                    self.par.par.locSave.saveTime();
+                }
+
+            },"wh",5,200);
+            this.atS.width=150
+            this.atS1=new DSliderBig(this.panel1,68+160,0,function(){
+                if(self.atBut){
+                    self.atBut.objMy.radius=this.value
+                    bazaPoint.debagDragPoint(self.atBut.idArr,self.atBut.objMy.wh,self.atBut.objMy.radius);
+                    visi3D.intRend =1  
+                    self.par.par.locSave.saveTime();
+                }
+            },"radius",5,200)
+            this.atS1.width=150
+            this.panel1.width=this.atS1.width+this.atS1.x;
+            this.panel1.height=this.atS1.height;
+
+
+
+
+            //////////////
+
+            this.panel2=new DPanel(this.dCont,50,240);
+            this.panel2.visible=false;
+            let b2=new DButton(this.panel2, 0, 0,"loadDemo",function(){
+                if(this.files[0]){
+
+
+                    if(blok1){                        
+                        blok1.ico=this.idArr;
+                        let p=-1;
+                        for (var i = 0; i < mainBig.objectBase.points.array.length; i++) {
+                            if(mainBig.objectBase.points.array[i].time==blok1.object.time)p=i
+                        }                        
+                        if(p!=-1){
+                            let a=this.files[0].name.split(".")
+                            let n=new Date().getTime()+"."+a[a.length-1]
+
+                            uploadFile("./../resources/d/"+n,this.files[0],function(s){   
+                                let ll = "resources/d/"+n; 
+                                
+                                blok1.object.info.demo=ll;
+                                mainBig.objectBase.points.array[p].info.demo=ll;                      
+                                self.par.par.locSave.saveTime();
+                            })
+                                                    
+                            
+                            
+                        } 
+                    }
+
+
+
+                    
+                    
+                }  
+            })
+            //b1.width=32
+            b2.startFile("image/*");
+
+
+
+
+
+
+
+            /////////////////////////////
+
+
+
+
+
+            this.but0=new ButTu(this.dContB,["resources/image/b0.png","resources/image/b1.png"],"TAG HINZUFÜGEN",function(){
                 aBut=this.active
                 aBut1=self.but1.active=false
             })
 
-            this.but1=new ButTu(this.dContB,["resources/image/b2.png","resources/image/b3.png"],"give Text",function(){
+            this.but1=new ButTu(this.dContB,["resources/image/b2.png","resources/image/b3.png"],"TAG ENTFERNEN",function(){
                 aBut1=this.active
                 aBut=self.but0.active=false
 
@@ -185,7 +376,8 @@ export class PPoint extends MOBaza {
                     }
                     arKu=mainBig.objectBase.points.array[p];
 
-                    blok=objB                    
+                    blok=objB 
+                    self.setBlok(blok)
                     self.visi3D.event3DArr.poiskName=self.visi3D.utility.sky.mesh.name
 
                     self.visi3D.position3d.pause=true
